@@ -101,7 +101,7 @@ __END__
 
 __END__
 
-=for Pod::Coverage method_names_here
+=for Pod::Coverage setup_installer
 
 =begin wikidoc
 
