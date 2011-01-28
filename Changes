@@ -1,5 +1,8 @@
 Revision history for Dist-Zilla-Plugin-OSPrereqs
 
 {{$NEXT}}
-    -
+
+  [NEW FEATURES]
+
+  - First release, allowing specification of OS-specific prequisites
 
