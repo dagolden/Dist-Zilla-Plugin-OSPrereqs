@@ -6,18 +6,20 @@ use lib 't/lib';
 use Test::More 0.88;
 use Path::Class;
 
-use Dist::Zilla::App::Tester;
 use Test::DZil;
 
-## SIMPLE TEST WITH DZIL::APP TESTER
+my $tzil = Builder->from_config(
+  { dist_root => 'corpus/DZ1' },
+);
 
-my $result = test_dzil('corpus/DZ1', [ qw(build) ]);
+$tzil->build;
 
-is($result->exit_code, 0, "dzil build would have exited 0")
-  or diag join("\n",@{$result->log_messages});
+my $contents = $tzil->slurp_file('build/Makefile.PL');
 
-my $makefilepl = file($result->build_dir, 'Makefile.PL')->slurp;
-like($makefilepl, qr/MSWin32/, "saw MSWin32");
+my $conditional = q|if ( $^O eq 'MSWin32' ) {|;
+my $prereq = q|$WriteMakefileArgs{PREREQ_PM}{'Win32API::File'} = '0.11'|;
+
+like($contents, qr/\Q$conditional\E.*?\Q$prereq\E.*?^\}/ms, "saw MSWin32 conditional");
 
 done_testing;
 

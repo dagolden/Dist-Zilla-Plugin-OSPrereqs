@@ -107,20 +107,27 @@ __END__
 
 = SYNOPSIS
 
-  use Dist::Zilla::Plugin::OSPrereqs;
+In your dist.ini:
+
+  [OSPrereqs / MSWin32]
+  Win32API::File = 0.11
 
 = DESCRIPTION
 
-This module might be cool, but you'd never know it from the lack
-of documentation.
+This [Dist::Zilla] plugin allows you to specify OS-specific prerequisites.  You
+must give the plugin a name corresponding to an operating system that would
+appear in {$^O}.  Any prerequisites listed will be conditionally added to
+{PREREQ_PM} in the Makefile.PL
 
-= USAGE
+= WARNING
 
-Good luck!
+This plugin only works for Makefile.PL geneated by the
+[Dist::Zilla::Plugin::MakeMaker] plugin and must appear in your dist.ini after
+that plugin.
 
-= SEE ALSO
-
-Maybe other modules do related things.
+This plugin is a fairly gross hack, based on the technique used for
+[Dist::Zilla::Plugin::DualLife] and might break if/when Dist::Zilla
+changes how it generates a Makefile.PL.
 
 =end wikidoc
 

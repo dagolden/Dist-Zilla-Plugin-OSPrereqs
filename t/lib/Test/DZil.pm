@@ -4,14 +4,49 @@ package Test::DZil;
 
 use Dist::Zilla::Tester;
 use Params::Util qw(_HASH0);
+use JSON 2;
+use Test::Deep ();
+use YAML::Tiny;
 
 use Sub::Exporter -setup => {
   exports => [
-    dist_ini   => \'_dist_ini',
-    simple_ini => \'_simple_ini',
+    is_filelist =>
+    is_yaml     =>
+    is_json     =>
+    dist_ini    => \'_dist_ini',
+    simple_ini  => \'_simple_ini',
+    Builder     =>
+    Minter      =>
   ],
-  groups  => [ default => [ qw(dist_ini simple_ini) ] ],
+  groups  => [ default => [ qw(-all) ] ],
 };
+
+sub is_filelist {
+  my ($have, $want, $comment) = @_;
+
+  my @want = sort @$want;
+  my @have = sort map { my $str = $_; $str =~ s{\\}{/}g; $str } @$have;
+
+  Test::More::is_deeply(\@have, \@want, $comment);
+}
+
+sub is_yaml {
+  my ($yaml, $want, $comment) = @_;
+
+  my $have = YAML::Tiny->read_string($yaml)
+    or die "Cannot decode YAML";
+
+  Test::Deep::cmp_deeply($have->[0], $want, $comment);
+}
+
+sub is_json {
+  my ($json, $want, $comment) = @_;
+
+  my $have = JSON->new->ascii(1)->decode($json)
+    or die "Cannot decode JSON";
+
+  Test::Deep::cmp_deeply($have, $want, $comment);
+}
 
 sub _build_ini_builder {
   my ($starting_core) = @_;
