@@ -105,7 +105,7 @@ __END__
 
 __END__
 
-=for Pod::Coverage setup_installer
+=for Pod::Coverage setup_installer metadata
 
 =begin wikidoc
 
