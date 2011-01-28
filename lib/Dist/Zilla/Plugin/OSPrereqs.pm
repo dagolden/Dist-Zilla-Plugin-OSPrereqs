@@ -10,7 +10,7 @@ use Moose;
 use List::AllUtils 'first';
 use namespace::autoclean;
 
-with 'Dist::Zilla::Role::InstallTool';
+with 'Dist::Zilla::Role::InstallTool', 'Dist::Zilla::Role::MetaProvider';
 
 has prereq_os => (
   is   => 'ro',
@@ -93,8 +93,12 @@ sub setup_installer {
   $makefile->content($content);
 }
 
+sub metadata {
+  return { dynamic_config => 1 };
+}
+
 no Moose;
-__PACKAGE__->meta->make_immutable(inline_constructor => 0);
+__PACKAGE__->meta->make_immutable(inline_constructor => 1);
 1;
 
 __END__

@@ -21,5 +21,8 @@ my $prereq = q|$WriteMakefileArgs{PREREQ_PM}{'Win32API::File'} = '0.11'|;
 
 like($contents, qr/\Q$conditional\E.*?\Q$prereq\E.*?^\}/ms, "saw MSWin32 conditional");
 
+my $meta = $tzil->slurp_file('build/META.yml');
+like($meta, qr/dynamic_config: +1/, "dynamic_config is true in META.yml");
+
 done_testing;
 
