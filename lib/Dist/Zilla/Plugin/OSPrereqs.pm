@@ -85,7 +85,7 @@ sub setup_installer {
     my $v = $prereq_hash->{$k};
     $prereq_str .= "  \$WriteMakefileArgs{PREREQ_PM}{'$k'} = '$v';\n";
   }
-  $prereq_str .= "}\n";
+  $prereq_str .= "}\n\n";
 
   $content =~ s/(?=WriteMakefile\s*\()/$prereq_str/
     or $self->log_fatal("Failed to insert conditional prereq for $os");
