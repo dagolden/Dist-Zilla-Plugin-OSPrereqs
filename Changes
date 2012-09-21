@@ -2,6 +2,11 @@ Revision history for Dist-Zilla-Plugin-OSPrereqs
 
 {{$NEXT}}
 
+  [NEW FEATURES}
+
+  - Support added for [ModuleBuild] based distributions
+    (Ioan Rogers)
+
 0.002     2011-01-28 09:58:01 EST5EDT
 
   [NEW FEATURES]
