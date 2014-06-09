@@ -110,7 +110,16 @@ sub setup_installer {
 
   my $content = $build_script->content;
 
-  my $prereq_str = "if ( \$^O eq '$os' ) {\n";
+  my $prereq_str;
+  if ($os =~ /^!~(.+)/) {
+    $prereq_str = "if ( \$^O !~ /$1/i ) {\n";
+  } elsif ($os =~ /^!(.+)/) {
+    $prereq_str = "if ( \$^O ne '$1' ) {\n";
+  } elsif ($os =~ /^~(.+)/) {
+    $prereq_str = "if ( \$^O =~ /$1/i ) {\n";
+  } else {
+    $prereq_str = "if ( \$^O eq '$os' ) {\n";
+  }
   my $prereq_hash = $self->_prereq;
   for my $k ( sort keys %$prereq_hash ) {
     my $v = $prereq_hash->{$k};
@@ -145,6 +154,21 @@ In your dist.ini:
 
   [OSPrereqs / MSWin32]
   Win32API::File = 0.11
+
+Some prefixes are recognized, i.e. C<!> (not), C<~> (regex match), C<!~> (regex
+non-match). Regex matches are done case-insensitively for convenience:
+
+  ; require on non-Win32 system
+  [OSPrereqs / !MSWin32]
+  Proc::ProcessTable = 0.50
+
+  ; require on BSD
+  [OSPrereqs / ~bsd]
+  BSD::Resource=0
+
+  ; require on non-Windows system
+  [OSPrereqs / !win]
+  Proc::ProcessTable = 0.50
 
 = DESCRIPTION
 
