@@ -193,5 +193,13 @@ This plugin is a fairly gross hack, based on the technique used for
 L<Dist::Zilla::Plugin::DualLife> and might break if/when Dist::Zilla
 changes how it generates install scripts.
 
+=head1 SEE ALSO
+
+=over 4
+
+=item * L<Dist::Zilla::Plugin::DynamicPrereqs>
+
+=back
+
 =cut
 
