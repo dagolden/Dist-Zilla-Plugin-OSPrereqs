@@ -2,6 +2,10 @@ Revision history for Dist-Zilla-Plugin-OSPrereqs
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - Supports negation and regex matching
+
 0.003     2012-09-20 22:31:53 America/New_York
 
   [NEW FEATURES}
@@ -22,3 +26,4 @@ Revision history for Dist-Zilla-Plugin-OSPrereqs
 
   - First release, allowing specification of OS-specific prequisites
 
+# vim: ts=2 sts=2 sw=2 et:
