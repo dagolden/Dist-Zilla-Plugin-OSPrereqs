@@ -9,7 +9,7 @@ package Dist::Zilla::Plugin::OSPrereqs;
 our $VERSION = "0.006";
 
 use Moose;
-use List::AllUtils 'first';
+use List::Util 1.33 'first';
 use namespace::autoclean;
 
 with 'Dist::Zilla::Role::InstallTool', 'Dist::Zilla::Role::MetaProvider';
