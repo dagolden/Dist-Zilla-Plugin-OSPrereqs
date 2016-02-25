@@ -5,7 +5,8 @@ use utf8;
 
 package Dist::Zilla::Plugin::OSPrereqs;
 # ABSTRACT: List prereqs conditional on operating system
-# VERSION
+
+our $VERSION = "0.006";
 
 use Moose;
 use List::AllUtils 'first';
