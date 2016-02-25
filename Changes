@@ -2,6 +2,8 @@ Revision history for Dist-Zilla-Plugin-OSPrereqs
 
 {{$NEXT}}
 
+0.006     2016-02-25 17:00:14-05:00 America/New_York
+
   [CHANGES]
 
   - Requires List::Util 1.33 instead of List::AllUtils
