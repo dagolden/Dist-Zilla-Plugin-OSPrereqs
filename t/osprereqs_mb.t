@@ -4,7 +4,6 @@ use warnings;
 use lib 't/lib';
 
 use Test::More 0.88;
-use Path::Class;
 
 use Test::DZil;
 
