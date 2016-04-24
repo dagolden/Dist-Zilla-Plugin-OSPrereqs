@@ -2,6 +2,10 @@ Revision history for Dist-Zilla-Plugin-OSPrereqs
 
 {{$NEXT}}
 
+  [PREREQS]
+
+  - Removed unused Path::Class prerequisite
+
 0.006     2016-02-25 17:00:14-05:00 America/New_York
 
   [CHANGES]
