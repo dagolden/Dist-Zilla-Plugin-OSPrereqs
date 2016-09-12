@@ -2,6 +2,15 @@ Revision history for Dist-Zilla-Plugin-OSPrereqs
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - Can munge both Makefile.PL and Build.PL
+
+  [PREREQS]
+
+  - Now uses Test::Deep::JSON for json comparision tests;
+    drops direct support on JSON.pm
+
 0.007     2016-04-23 22:21:56-04:00 America/New_York
 
   [PREREQS]
