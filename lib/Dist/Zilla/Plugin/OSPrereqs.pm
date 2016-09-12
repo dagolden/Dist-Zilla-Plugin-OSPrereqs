@@ -42,12 +42,6 @@ has _prereq => (
     default => sub { {} },
 );
 
-has _builder => (
-    is      => 'rw',
-    isa     => 'Str',
-    default => 'makemaker',
-);
-
 has _prereq_str => (
     is      => 'ro',
     isa     => 'HashRef',
@@ -100,47 +94,39 @@ sub setup_installer {
     my ($self) = @_;
     return unless my $os = $self->prereq_os;
 
-    # first, try MakeMaker
-    my $build_script = first { $_->name eq 'Makefile.PL' } @{ $self->zilla->files };
-    if ( !$build_script ) {
-        $build_script = first { $_->name eq 'Build.PL' } @{ $self->zilla->files };
-        if ($build_script) {
-            $self->_builder('modulebuild');
+    foreach my $build_script (grep { $_->name eq 'Makefile.PL' or $_->name eq 'Build.PL' } @{ $self->zilla->files })
+    {
+        my $builder = $build_script->name eq 'Makefile.PL' ? 'makemaker' : 'modulebuild';
+        my $content = $build_script->content;
+
+        my $prereq_str;
+        if ( $os =~ /^!~(.+)/ ) {
+            $prereq_str = "if ( \$^O !~ /$1/i ) {\n";
+        }
+        elsif ( $os =~ /^!(.+)/ ) {
+            $prereq_str = "if ( \$^O ne '$1' ) {\n";
+        }
+        elsif ( $os =~ /^~(.+)/ ) {
+            $prereq_str = "if ( \$^O =~ /$1/i ) {\n";
         }
         else {
-            $self->log_fatal(
-                'No Build.PL or Makefile.PL found. Using either [MakeMaker] or [ModuleBuild] is required'
-            );
+            $prereq_str = "if ( \$^O eq '$os' ) {\n";
         }
+        my $prereq_hash = $self->_prereq;
+        for my $k ( sort keys %$prereq_hash ) {
+            my $v = $prereq_hash->{$k};
+            $prereq_str .= $self->_prereq_str->{ $builder } . "{'$k'} = '$v';\n";
+        }
+        $prereq_str .= "}\n\n";
+
+        my $reg = $self->_builder_regex->{ $builder };
+        $content =~ s/(?=$reg)/$prereq_str/
+          or $self->log_fatal("Failed to insert conditional prereq for $os");
+
+        return $build_script->content($content);
     }
 
-    my $content = $build_script->content;
-
-    my $prereq_str;
-    if ( $os =~ /^!~(.+)/ ) {
-        $prereq_str = "if ( \$^O !~ /$1/i ) {\n";
-    }
-    elsif ( $os =~ /^!(.+)/ ) {
-        $prereq_str = "if ( \$^O ne '$1' ) {\n";
-    }
-    elsif ( $os =~ /^~(.+)/ ) {
-        $prereq_str = "if ( \$^O =~ /$1/i ) {\n";
-    }
-    else {
-        $prereq_str = "if ( \$^O eq '$os' ) {\n";
-    }
-    my $prereq_hash = $self->_prereq;
-    for my $k ( sort keys %$prereq_hash ) {
-        my $v = $prereq_hash->{$k};
-        $prereq_str .= $self->_prereq_str->{ $self->_builder } . "{'$k'} = '$v';\n";
-    }
-    $prereq_str .= "}\n\n";
-
-    my $reg = $self->_builder_regex->{ $self->_builder };
-    $content =~ s/(?=$reg)/$prereq_str/
-      or $self->log_fatal("Failed to insert conditional prereq for $os");
-
-    return $build_script->content($content);
+    return 1;
 }
 
 sub metadata {
