@@ -90,18 +90,18 @@ sub BUILDARGS {
     };
 }
 
-sub munge_files
-{
+sub munge_files {
     my ($self) = @_;
 
     return unless my $os = $self->prereq_os;
 
-    my @build_scripts = grep { $_->name eq 'Makefile.PL' or $_->name eq 'Build.PL' } @{ $self->zilla->files };
-    $self->log_fatal('No Makefile.PL or Build.PL found! Is [MakeMaker] and [ModuleBuild] at least version 5.022?')
-        if not @build_scripts;
+    my @build_scripts = grep { $_->name eq 'Makefile.PL' or $_->name eq 'Build.PL' }
+      @{ $self->zilla->files };
+    $self->log_fatal(
+        'No Makefile.PL or Build.PL found! Is [MakeMaker] and [ModuleBuild] at least version 5.022?'
+    ) if not @build_scripts;
 
-    foreach my $build_script (@build_scripts)
-    {
+    foreach my $build_script (@build_scripts) {
         my $builder = $build_script->name eq 'Makefile.PL' ? 'makemaker' : 'modulebuild';
         my $content = $build_script->content;
 
@@ -121,11 +121,11 @@ sub munge_files
         my $prereq_hash = $self->_prereq;
         for my $k ( sort keys %$prereq_hash ) {
             my $v = $prereq_hash->{$k};
-            $prereq_str .= $self->_prereq_str->{ $builder } . "{'$k'} = '$v';\n";
+            $prereq_str .= $self->_prereq_str->{$builder} . "{'$k'} = '$v';\n";
         }
         $prereq_str .= "}\n\n";
 
-        my $reg = $self->_builder_regex->{ $builder };
+        my $reg = $self->_builder_regex->{$builder};
         $content =~ s/(?=$reg)/$prereq_str/
           or $self->log_fatal("Failed to insert conditional prereq for $os");
 
@@ -145,7 +145,7 @@ __PACKAGE__->meta->make_immutable( inline_constructor => 1 );
 
 __END__
 
-=for Pod::Coverage setup_installer metadata
+=for Pod::Coverage munge_files metadata
 
 =head1 SYNOPSIS
 
