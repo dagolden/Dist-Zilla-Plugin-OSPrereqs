@@ -12,7 +12,7 @@ use Moose;
 use List::Util 1.33 'first';
 use namespace::autoclean;
 
-with 'Dist::Zilla::Role::InstallTool', 'Dist::Zilla::Role::MetaProvider';
+with 'Dist::Zilla::Role::FileMunger', 'Dist::Zilla::Role::MetaProvider';
 
 has prereq_os => (
     is       => 'ro',
@@ -90,11 +90,17 @@ sub BUILDARGS {
     };
 }
 
-sub setup_installer {
+sub munge_files
+{
     my ($self) = @_;
+
     return unless my $os = $self->prereq_os;
 
-    foreach my $build_script (grep { $_->name eq 'Makefile.PL' or $_->name eq 'Build.PL' } @{ $self->zilla->files })
+    my @build_scripts = grep { $_->name eq 'Makefile.PL' or $_->name eq 'Build.PL' } @{ $self->zilla->files };
+    $self->log_fatal('No Makefile.PL or Build.PL found! Is [MakeMaker] and [ModuleBuild] at least version 5.022?')
+        if not @build_scripts;
+
+    foreach my $build_script (@build_scripts)
     {
         my $builder = $build_script->name eq 'Makefile.PL' ? 'makemaker' : 'modulebuild';
         my $content = $build_script->content;
