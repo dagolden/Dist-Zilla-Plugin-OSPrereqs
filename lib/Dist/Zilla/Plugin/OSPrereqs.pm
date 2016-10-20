@@ -166,7 +166,7 @@ non-match). Regex matches are done case-insensitively for convenience:
   BSD::Resource=0
 
   ; require on non-Windows system
-  [OSPrereqs / !win]
+  [OSPrereqs / !~win]
   Proc::ProcessTable = 0.50
 
 =head1 DESCRIPTION
@@ -195,4 +195,3 @@ changes how it generates install scripts.
 =back
 
 =cut
-
