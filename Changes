@@ -2,6 +2,11 @@ Revision history for Dist-Zilla-Plugin-OSPrereqs
 
 {{$NEXT}}
 
+  [ADDED]
+
+  - Makefile.PL generated code now conditionally sets prereqs into
+    the list of fallback prerequisites as well.
+
 0.008     2016-09-12 10:30:34-04:00 America/New_York
 
   [ADDED]
