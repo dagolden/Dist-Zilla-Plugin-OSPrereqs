@@ -2,6 +2,8 @@ Revision history for Dist-Zilla-Plugin-OSPrereqs
 
 {{$NEXT}}
 
+0.010     2018-04-22 22:00:43+02:00 Europe/Oslo
+
   [ADDED]
 
   - detect incorrect usage of plugin from a bundle, rather than allowing
