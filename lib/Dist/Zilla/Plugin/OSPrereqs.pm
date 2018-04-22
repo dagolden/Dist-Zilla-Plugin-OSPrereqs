@@ -21,7 +21,10 @@ has prereq_os => (
     init_arg => 'phase',
     default  => sub {
         my ($self) = @_;
-        return $self->plugin_name;
+        my $os = $self->plugin_name;
+        $self->log_fatal([ 'inferred OS name as %s, which looks like it came from a bundle!', $os ])
+            if $os =~ m{/};
+        return $os;
     },
 );
 
