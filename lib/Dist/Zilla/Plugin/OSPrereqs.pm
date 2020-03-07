@@ -134,7 +134,7 @@ sub munge_files {
         $content =~ s/(?=$reg)/$prereq_str/
           or $self->log_fatal("Failed to insert conditional prereq for $os");
 
-        return $build_script->content($content);
+        $build_script->content($content);
     }
 
     return 1;
